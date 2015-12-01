@@ -1,36 +1,34 @@
-package animals;
+package moveanimals.movesnake;
 
 
- import animals.frogs.BlueFrog;
- import animals.frogs.GreenFrog;
- import animals.frogs.RedFrog;
- import base.Direction;
- import base.SnakeGame;
-
+ import bodies.Bodie;
+ import moveanimals.AnimalControl;
+ import moveanimals.FrogControl;
+ import moveanimals.movefrogs.BlueFrogControl;
+ import moveanimals.movefrogs.GreenFrogControl;
+ import moveanimals.movefrogs.RedFrogControl;
+ import main.direction.Direction;
+ import main.SnakeGame;
  import javax.swing.*;
  import java.awt.event.InputEvent;
  import java.awt.event.MouseEvent;
  import java.awt.event.MouseListener;
  import java.util.ArrayList;
 
- /**
- * Created by Sergei_Kuranov on 10/7/2015.
- */
-public class Snake extends Animal implements MouseListener {
+public class SnakeControl extends AnimalControl implements MouseListener {
     int snakeLenght;
-    public ArrayList<Integer> snakeBodyX = new ArrayList();
-    public ArrayList<Integer> snakeBodyY = new ArrayList();
     public Direction direction;
     private JFrame frame;
     private boolean flInc;
-    public Snake(SnakeGame snakeGame) {
+    public SnakeControl(SnakeGame snakeGame) {
         super(snakeGame);
+        bodie = new Bodie();
         direction = new Direction();
         this.snakeLenght = snakeGame.getBaseParams().get("snakeLenth");
-        this.frame = snakeGame.getFrame();
+        this.frame = snakeGame.getDraw().getFrame();
         for(int i = 0; i < snakeGame.getBaseParams().get("snakeLenth"); i++){
-            snakeBodyX.add(0);
-            snakeBodyY.add(snakeGame.getBaseParams().get("snakeLenth")-i-1);
+            bodie.getCoordX().add(0);
+            bodie.getCoordY().add(snakeGame.getBaseParams().get("snakeLenth") - i - 1);
         }
         frame.repaint(); //Repainting all canvas at newgame.
     }
@@ -53,77 +51,84 @@ public class Snake extends Animal implements MouseListener {
         return null;
     }
 
-    @Override
+     public Bodie getBodie() {
+         return bodie;
+     }
+
+     @Override
     public void move() {
+        ArrayList<Integer> snakeBodyX = bodie.getCoordX();
+        ArrayList<Integer> snakeBodyY = bodie.getCoordY();
         if (flInc){
             snakeLenght++;
-            snakeBodyX.add(1);
-            snakeBodyY.add(1);
+            bodie.getCoordX().add(1);
+            bodie.getCoordY().add(1);
             flInc = false;
         }
-        int[] afterTailCell = {snakeBodyX.get(snakeLenght-1),snakeBodyY.get(snakeLenght-1)}; // Put last cell
+        int[] afterTailCell = {snakeBodyX.get(snakeLenght-1),bodie.getCoordY().get(snakeLenght-1)}; // Put last cell
         // into memory before move
         for (int i = snakeLenght-1; i >= 0; i--) {
             if (i >= 1){//Moving snake's body
-                snakeBodyX.set(i,snakeBodyX.get(i - 1));
-                snakeBodyY.set(i,snakeBodyY.get(i - 1));
+                snakeBodyX.set(i, snakeBodyX.get(i - 1));
+                snakeBodyY.set(i, snakeBodyY.get(i - 1));
                 if ((i == snakeLenght - 1)||(i==1)){
                     repaintCell(i); // Repainting cell after head and tail
                 }
             }
             else {
-                snakeBodyX.set(i,snakeBodyX.get(i + 1) + direction.getCurDir()[0]);//Moving snake's head
+                snakeBodyX.set(i, snakeBodyX.get(i + 1) + direction.getCurDir()[0]);//Moving snake's head
                 snakeBodyY.set(i,snakeBodyY.get(i + 1) + direction.getCurDir()[1]);
                 if (snakeBodyX.get(0)<0){
-                    snakeBodyX.set(0,snakeGame.getBaseParams().get("width") - 1);
+                    snakeBodyX.set(0,snakeGame.getBaseParams().get("width")-1);
                 } //"Transparent walls"
                 if (snakeBodyY.get(0)<0){
-                    snakeBodyY.set(0,snakeGame.getBaseParams().get("height") - 1);
+                    snakeBodyY.set(0,snakeGame.getBaseParams().get("height")-1);
                 }
                 if (snakeBodyX.get(0)>snakeGame.getBaseParams().get("width")-1){
                     snakeBodyX.set(0,0);
                 }
+
                 if (snakeBodyY.get(0)>snakeGame.getBaseParams().get("height")-1){
                     snakeBodyY.set(0,0);
                 }
 
-                exitLabel: for (Frog frog : snakeGame.getFrogs()) {//Eating frogs by snake
+                exitLabel: for (FrogControl frogControl : snakeGame.getFrogControls()) {//Eating movefrogs by snake
 
-                    if (frog instanceof BlueFrog) {
-                        frog.incCycleCount();
-                        if (frog.getCycleCount() > frog.getLifeCycle()) {
-                            int tempX = frog.getX();
-                            int tempY = frog.getY();
-                            frog.cancel();
-                            snakeGame.getFrogs().remove(frog);
+                    if (frogControl instanceof BlueFrogControl) {
+                        frogControl.incCycleCount();
+                        if (frogControl.getCycleCount() > frogControl.getLifeCycle()) {
+                            int tempX = frogControl.getBodie().getCoordX().get(0);
+                            int tempY = frogControl.getBodie().getCoordY().get(0);
+                            frogControl.cancel();
+                            snakeGame.getFrogControls().remove(frogControl);
                             frame.repaint(tempX * 32, (tempY * 32) + 60, 32, 32);
                         }
                     }
-                    if ((snakeBodyX.get(i) == frog.getX()) && (snakeBodyY.get(i) ==
-                            frog.getY())) {
-                        if (frog instanceof GreenFrog) {
+                    if ((snakeBodyX.get(i) == frogControl.getBodie().getCoordX().get(0)) && (snakeBodyY.get(i) ==
+                            frogControl.getBodie().getCoordY().get(0))) {
+                        if (frogControl instanceof GreenFrogControl) {
                             flInc = true;
-                            snakeGame.getScoreLabel().setText("  " +
-                                    (Integer.parseInt((snakeGame.getScoreLabel().getText()).trim()) + 1));
-                        } else if (frog instanceof RedFrog) {
+                            snakeGame.getDraw().getScoreLabel().setText("  " +
+                                    (Integer.parseInt((snakeGame.getDraw().getScoreLabel().getText()).trim()) + 1));
+                        } else if (frogControl instanceof RedFrogControl) {
                             if (snakeLenght > snakeGame.getBaseParams().get("snakeLenth")) {
                                 snakeLenght--;
                             }
-                            snakeGame.getScoreLabel().setText("  " +
-                                    (Integer.parseInt((snakeGame.getScoreLabel().getText()).trim()) + 2));
-                        } else if (frog instanceof BlueFrog) {
+                            snakeGame.getDraw().getScoreLabel().setText("  " +
+                                    (Integer.parseInt((snakeGame.getDraw().getScoreLabel().getText()).trim()) + 2));
+                        } else if (frogControl instanceof BlueFrogControl) {
                             snakeGame.stopGame();
                             break exitLabel;
                         }
-                        frog.cancel();
-                        snakeGame.getFrogs().remove(frog);
+                        frogControl.cancel();
+                        snakeGame.getFrogControls().remove(frogControl);
                     }
                 }
 
-                while (snakeGame.getFrogs().size() < snakeGame.getBaseParams().get("frogCount")) {//Frog respawning
-                    Frog tempFrog = snakeGame.getNewFrog();
-                    snakeGame.getFrogs().add(tempFrog);
-                    snakeGame.getExecutor().submit(tempFrog);
+                while (snakeGame.getFrogControls().size() < snakeGame.getBaseParams().get("frogCount")) {//FrogControl respawning
+                    FrogControl tempFrogControl = snakeGame.getNewFrog();
+                    snakeGame.getFrogControls().add(tempFrogControl);
+                    snakeGame.getExecutor().submit(tempFrogControl);
                 }
                 repaintCell(i); // Repainting head
 
@@ -139,8 +144,13 @@ public class Snake extends Animal implements MouseListener {
         frame.repaint(afterTailCell[0] * 32, (afterTailCell[1] * 32) + 60, 32, 32);//Repaint after tail
     }
 
-    public void repaintCell(int i){frame.repaint(snakeBodyX.get(i)*32, (snakeBodyY.get(i) * 32) + 60, 32, 32);
+
+
+     public void repaintCell(int i){
+        frame.repaint(bodie.getCoordX().get(i)*32,
+                (bodie.getCoordY().get(i) * 32) + 60, 32, 32);
     }
+
 
     @Override
     public void mouseClicked(MouseEvent e) {

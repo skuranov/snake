@@ -1,4 +1,4 @@
-package base;
+package main.direction;
 
 public class Direction {
 
