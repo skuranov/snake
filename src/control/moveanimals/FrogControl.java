@@ -1,9 +1,9 @@
-package moveanimals;
+package control.moveanimals;
 
 
 import bodies.Bodie;
-import main.direction.Direction;
-import main.SnakeGame;
+import control.direction.Direction;
+import control.SnakeGame;
 
 import javax.swing.*;
 import java.awt.*;
@@ -96,7 +96,7 @@ public abstract class FrogControl extends AnimalControl {
 
         frame.repaint(frogBodyXPast * 32, (frogBodyYPast * 32) + 60, 32, 32);
         frame.repaint(bodie.getCoordX().get(0)*32,
-                (bodie.getCoordY().get(0)*32)+60, 32, 32);//Repaint frog after main
+                (bodie.getCoordY().get(0)*32)+60, 32, 32);//Repaint frog after control
     }
 
 

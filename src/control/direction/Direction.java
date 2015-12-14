@@ -1,4 +1,4 @@
-package main.direction;
+package control.direction;
 
 public class Direction {
 

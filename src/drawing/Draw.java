@@ -1,7 +1,7 @@
 package drawing;
 
-import moveanimals.FrogControl;
-import main.SnakeGame;
+import control.moveanimals.FrogControl;
+import control.SnakeGame;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;

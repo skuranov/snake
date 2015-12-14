@@ -1,7 +1,7 @@
-package moveanimals;
+package control.moveanimals;
 
 import bodies.Bodie;
-import main.SnakeGame;
+import control.SnakeGame;
 import java.util.concurrent.Callable;
 
 public abstract class AnimalControl implements Callable{

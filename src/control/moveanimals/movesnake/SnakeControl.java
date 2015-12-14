@@ -1,14 +1,14 @@
-package moveanimals.movesnake;
+package control.moveanimals.movesnake;
 
 
  import bodies.Bodie;
- import moveanimals.AnimalControl;
- import moveanimals.FrogControl;
- import moveanimals.movefrogs.BlueFrogControl;
- import moveanimals.movefrogs.GreenFrogControl;
- import moveanimals.movefrogs.RedFrogControl;
- import main.direction.Direction;
- import main.SnakeGame;
+ import control.moveanimals.AnimalControl;
+ import control.moveanimals.FrogControl;
+ import control.moveanimals.movefrogs.BlueFrogControl;
+ import control.moveanimals.movefrogs.GreenFrogControl;
+ import control.moveanimals.movefrogs.RedFrogControl;
+ import control.direction.Direction;
+ import control.SnakeGame;
  import javax.swing.*;
  import java.awt.event.InputEvent;
  import java.awt.event.MouseEvent;

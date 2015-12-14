@@ -1,7 +1,7 @@
-package moveanimals.movefrogs;
+package control.moveanimals.movefrogs;
 
-import moveanimals.FrogControl;
-import main.SnakeGame;
+import control.moveanimals.FrogControl;
+import control.SnakeGame;
 
 import java.awt.*;
 

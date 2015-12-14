@@ -1,10 +1,10 @@
-package main;
+package control;
 
-import moveanimals.FrogControl;
-import moveanimals.movesnake.SnakeControl;
-import moveanimals.movefrogs.BlueFrogControl;
-import moveanimals.movefrogs.GreenFrogControl;
-import moveanimals.movefrogs.RedFrogControl;
+import control.moveanimals.FrogControl;
+import control.moveanimals.movesnake.SnakeControl;
+import control.moveanimals.movefrogs.BlueFrogControl;
+import control.moveanimals.movefrogs.GreenFrogControl;
+import control.moveanimals.movefrogs.RedFrogControl;
 import drawing.Draw;
 import java.util.HashMap;
 import java.util.Random;
