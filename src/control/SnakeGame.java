@@ -30,7 +30,7 @@ public class SnakeGame {
     public boolean getFlWait(){return flWait;
     }
 
-    public void setBaseParams(String width,
+    private void setBaseParams(String width,
                               String height,
                               String snakeLenth,
                               String frogCount,
